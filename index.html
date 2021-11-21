@@ -1,0 +1,93 @@
+<html>
+<head>
+  <title>youtube</title>
+</head>
+<body>
+  <div>
+    <select id="song">
+      <option value="" selected>曲を選択</option>
+      <!-- <option value="0">夜に駆ける / Into The Night</option> -->
+      <option value="1">あの夢をなぞって / Tracing A Dream</option>
+      <!-- <option value="2">ハルジオン</option> -->
+      <option value="3">たぶん / Haven't</option>
+      <option value="4">群青 / Blue</option>
+      <!-- <option value="5">ハルカ</option> -->
+      <option value="6">怪物 / Monster</option>
+      <option value="7">アンコール / Encore</option>
+      <option value="8">優しい彗星 / Comet</option>
+      <option value="9">三原色 / RGB</option>
+      <!-- <option value="10">ラブレター</option> -->
+      <!-- <option value="11">大正浪漫</option> -->
+    </select>
+    <button onClick="loadPlayer()">読み込み</button>
+  </div>
+  <div>
+    <button onClick="playBoth()">同時再生する</button>
+  </div>
+  <div id="player_en"></div>
+  <div id="player_jp"></div>
+  
+
+<script>
+  // プレーヤーのサイズを指定
+  var ytWidth = 640;
+  var ytHeight = 390;
+   
+  // 埋め込むyoutubeのIDを指定
+  var id_eng = ["b3K61cQ8_fg","o0m6gOr-C04","","pwHDdcVDi_I","L8hMN2UAPxs","","Eoe5IZHbarQ","zg_W0DInbNc","iikBL2cyn4E","BS5YyieaXgc",,"",""];
+  var id_jap = ["x8VYWazR5mE","sAuEeM_6zpk","kzdJkT4kp-A","8iuLXODzL04","Y4nEEZwckuU","vd3IlOjSUGQ","dy90tA3TT1c","vcGbefQBvJ4","VyvhvlYvRnc","nhOhFOoURnE","mnta9Pp2LqA","wJQ9ig_d8yY"];
+  
+  
+  var ytData = [
+      {
+          id: 'L8hMN2UAPxs',
+          area: 'player01'
+      }, {
+          id: 'Y4nEEZwckuU',
+          area: 'player02'
+      }
+  ];
+   
+  var ytPlayer = [];
+  var ytPlaying, ytStop, ytPlay;
+   
+  // YouTube Player APIを読み込む
+  var tag = document.createElement('script');
+  tag.src = "https://www.youtube.com/iframe_api";
+  var firstScriptTag = document.getElementsByTagName('script')[0];
+  firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+  
+  
+  // API読み込み後に、各エリアにプレーヤーを埋め込む
+  function onYouTubeIframeAPIReady() {
+      ytPlayer[0] = new YT.Player('player_en', {
+          height: ytHeight,
+          width: ytWidth
+      });
+      ytPlayer[1] = new YT.Player('player_jp', {
+          height: ytHeight,
+          width: ytWidth
+      });
+  }
+  
+  function loadPlayer() {
+      var num = document.getElementById("song").value;
+      ytPlayer[0].cueVideoById({videoId: id_eng[num]});
+      ytPlayer[1].cueVideoById({videoId: id_jap[num]});
+  }
+  
+  function playBoth() {
+      // 各プレーヤーの状態を確認
+      for(var i = 0; i < ytData.length; i++) {
+          var time = ytPlayer[i].getCurrentTime();
+          ytPlayer[i].seekTo(-time, true);
+      }
+      for(var i = 0; i < ytData.length; i++) {
+          ytPlayer[i].playVideo();
+      }
+  }
+</script>
+
+</body>
+
+
